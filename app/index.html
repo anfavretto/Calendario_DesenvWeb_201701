@@ -1,5 +1,5 @@
-<!doctype html>
-<html ng-app="Calendario">
+<!DOCTYPE html>
+<html ng-app="mwl.calendar.docs">
   <head>
     <script src="https://unpkg.com/moment@2.17.1"></script>
     <script src="https://unpkg.com/interactjs@1"></script>
@@ -9,17 +9,180 @@
     <script src="https://unpkg.com/rrule@2"></script>
     <script src="https://unpkg.com/angular-bootstrap-colorpicker@3"></script>
     <script src="https://unpkg.com/angular-bootstrap-calendar"></script>
-    <script src="./lib/jquery-3.2.0.min.js"></script>
     <link href="https://unpkg.com/bootstrap@3/dist/css/bootstrap.css" rel="stylesheet">
     <link href="https://unpkg.com/angular-bootstrap-colorpicker@3/css/colorpicker.min.css" rel="stylesheet">
     <link href="https://unpkg.com/angular-bootstrap-calendar/dist/css/angular-bootstrap-calendar.min.css" rel="stylesheet">
-    
-    <meta charset="utf-8">
-    <title>Calendário</title>
-    <link rel="stylesheet" href="./css/bootstrap.min.css" />
-    <script src="./lib/angular.min.js"></script>
+    <script src="script/controller.js"></script>
+    <script src="script/popupController.js"></script>
+	<meta charset="UTF-8">
   </head>
   <body>
-    
+    <div ng-controller="angularController as ac">
+	<h2>Calendário em Angular!</h2>
+	<h2 class="text-center">{{ ac.calendarTitle }}</h2>
+	<div class="row">
+		<div class="col-md-6 text-center">
+		<div class="btn-group">
+        <button
+          class="btn btn-primary"
+          mwl-date-modifier
+          date="ac.viewDate"
+          decrement="ac.calendarView"
+          ng-click="ac.cellIsOpen = false">
+          Anterior
+        </button>
+        <button
+          class="btn btn-default"
+          mwl-date-modifier
+          date="ac.viewDate"
+          set-to-today
+          ng-click="ac.cellIsOpen = false">
+          Hoje
+        </button>
+        <button
+          class="btn btn-primary"
+          mwl-date-modifier
+          date="ac.viewDate"
+          increment="ac.calendarView"
+          ng-click="ac.cellIsOpen = false">
+          Seguinte
+        </button>
+      </div>
+    </div>
+
+    <br class="visible-xs visible-sm">
+
+    <div class="col-md-6 text-center">
+      <div class="btn-group">
+        <label class="btn btn-primary" ng-model="ac.calendarView" uib-btn-radio="'year'" ng-click="ac.cellIsOpen = false">Anual</label>
+        <label class="btn btn-primary" ng-model="ac.calendarView" uib-btn-radio="'month'" ng-click="ac.cellIsOpen = false">Mensal</label>
+        <label class="btn btn-primary" ng-model="ac.calendarView" uib-btn-radio="'week'" ng-click="ac.cellIsOpen = false">Semanal</label>
+        <label class="btn btn-primary" ng-model="ac.calendarView" uib-btn-radio="'day'" ng-click="ac.cellIsOpen = false">Diário</label>
+      </div>
+    </div>
+  </div>
+
+  <br>
+
+  <mwl-calendar
+    events="ac.events"
+    view="ac.calendarView"
+    view-title="ac.calendarTitle"
+    view-date="ac.viewDate"
+    on-event-click="ac.eventClicked(calendarEvent)"
+    on-event-times-changed="ac.eventTimesChanged(calendarEvent); calendarEvent.startsAt = calendarNewEventStart; calendarEvent.endsAt = calendarNewEventEnd"
+    cell-is-open="ac.cellIsOpen"
+    day-view-start="06:00"
+    day-view-end="22:59"
+    day-view-split="30"
+    cell-modifier="ac.modifyCell(calendarCell)"
+    cell-auto-open-disabled="false"
+    on-timespan-click="ac.timespanClicked(calendarDate, calendarCell)">
+  </mwl-calendar>
+
+  <br><br><hr><br>
+ 
+
+  <h3 id="editor">
+    Assitente de Criação de Eventos:
+    <button
+      class="btn btn-primary pull-right"
+      ng-click="ac.addEvent()">
+      Adicionar Evento
+    </button>
+    <div class="clearfix"></div>
+  </h3>
+
+  <table class="table table-bordered" ng-show="ac.show">
+    <thead>
+      <tr>
+        <th class="text-center" style="width: 280px">Título</th>
+        <th class="text-center" style="width: 160px">Cor de Marcação (Primária)</th>
+        <th class="text-center" style="width: 160px" >Cor de Marcação (Secundária)</th>
+        <th class="text-center">Início</th>
+        <th class="text-center">Final</th>
+        <th class="text-center">Excluir</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr ng-repeat="event in ac.events track by $index">
+        <td>
+          <input
+            type="text"
+            class="form-control"
+            ng-model="event.title">
+        </td>
+        <td>
+          <input class="form-control" colorpicker type="text" ng-model="event.color.primary">
+        </td>
+        <td>
+          <input class="form-control" colorpicker type="text" ng-model="event.color.secondary">
+        </td>
+        <td>
+          <p class="input-group" style="max-width: 250px">
+            <input
+              type="text"
+              class="form-control"
+              readonly
+              uib-datepicker-popup="dd MMMM yyyy"
+              ng-model="event.startsAt"
+              is-open="event.startOpen"
+              close-text="Close" >
+            <span class="input-group-btn">
+              <button
+                type="button"
+                class="btn btn-default"
+                ng-click="ac.toggle($event, 'startOpen', event)">
+                <i class="glyphicon glyphicon-calendar"></i>
+              </button>
+            </span>
+          </p>
+          <div
+            uib-timepicker
+            ng-model="event.startsAt"
+            hour-step="1"
+            minute-step="15"
+            show-meridian="true">
+          </div>
+        </td>
+        <td>
+          <p class="input-group" style="max-width: 250px">
+            <input
+              type="text"
+              class="form-control"
+              readonly
+              uib-datepicker-popup="dd MMMM yyyy"
+              ng-model="event.endsAt"
+              is-open="event.endOpen"
+              close-text="Close">
+            <span class="input-group-btn">
+              <button
+                type="button"
+                class="btn btn-default"
+                ng-click="ac.toggle($event, 'endOpen', event)">
+                <i class="glyphicon glyphicon-calendar"></i>
+              </button>
+            </span>
+          </p>
+          <div
+            uib-timepicker
+            ng-model="event.endsAt"
+            hour-step="1"
+            minute-step="15"
+            show-meridian="true">
+          </div>
+        </td>
+        <td content-align="center">
+          <button
+            class="btn btn-danger"
+            ng-click="ac.events.splice($index, 1)">
+            Excluir
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
   </body>
 </html>
