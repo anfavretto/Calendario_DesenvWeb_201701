@@ -1,5 +1,5 @@
-			body { font-family:Arial; font-size:14px; }
-			body>span, body>h1 { float:left; width:100%; margin:0; padding:0; margin-bottom:10px; }
+			body {font-family: 'Roboto Condensed', sans-serif;letter-spacing: -0.03em;font-size:14px;background-color:#f2f2f2 }
+			body>span, body>h1 { float:left; width:100%; margin-bottom:10px; }
 			
 			span { color:red;
                 >b { color:black; }
@@ -7,16 +7,17 @@
             
             .vertical-centre (@height) { height:@height; line-height:@height !important; display:inline-block; vertical-align:middle; }
             .border-box { box-sizing:border-box; -moz-box-sizing:border-box; }
+            .calendar{margin-bottom: 20px}
 
             @border-colour:#CCC;
-            calendar {display:block; .border-box; background:white; width:300px; border:solid 1px @border-colour; margin-bottom:10px;
+            calendar {display:block; .border-box; background:white; border:solid 1px @border-colour; margin-bottom:20px;
                 @secondary-colour:forestgreen;
                 @spacing:10px;
                 
                 @icon-width:80px;
                 @header-height:80px;
                 
-                >div.header { float:left; width:380%; background:@secondary-colour; height:@header-height; color:white;
+                >div.header { float:left; background:@secondary-colour; height:@header-height; color:white;
                     >* { .vertical-centre(@header-height); }
                     >i { float:left; width:@icon-width; font-size:2em; font-weight:bold; 
 						position:relative; .border-box; padding:0 @spacing; cursor:pointer; }
@@ -26,9 +27,9 @@
 						.border-box; padding-left:@icon-width+@spacing; margin-left:@icon-width*-1; text-align:center; 
 						padding-right:@icon-width; color:inherit; }
                 }
-                >div.week { float:left; width:380%; border-top:solid 1px @border-colour;
+                >div.week { padding:0px; border-top:solid 1px @border-colour;
                     &:first-child { border-top:none; }
-                    >span.day { float:left; width:100%/7; .border-box; border-left:solid 1px @border-colour; font-size:1em; text-align:center; .vertical-centre(30px); background:white; cursor:pointer; color:black;
+                    >span.day { float:left; width:100%/7; .border-box; border-left:solid 1px @border-colour; font-size:16px; text-align:center; .vertical-centre(35px); background:white; cursor:pointer; color:black;
                         &:first-child { border-left:none; }
                         &.today { background:#E3F2FF; }
                         &.different-month { color:#C0C0C0; }
@@ -37,3 +38,4 @@
                     &.names>span { color:@secondary-colour; font-weight:bold; }
                 }
             }
+            .activities{margin-left:15px;background-color:#e0e0e0}
