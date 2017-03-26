@@ -39,3 +39,47 @@
                 }
             }
             .activities{margin-left:15px;background-color:#e0e0e0}
+
+            calendarday {display:block; .border-box; background:white; border:solid 1px @border-colour; margin-bottom:20px;
+                @secondary-colour:#4fc94f;
+                @spacing:10px;
+                
+                @icon-width:80px;
+                @header-height:80px;
+                
+                >div.header { float:left; background:@secondary-colour; height:@header-height; color:white;
+                    >* { .vertical-centre(@header-height); }
+                    >i { float:left; width:@icon-width; font-size:2em; font-weight:bold; 
+						position:relative; .border-box; padding:0 @spacing; cursor:pointer; }
+                    >i.fa-angle-left { text-align:left; }
+                    >i.fa-angle-right { text-align:right; margin-left:@icon-width*-1; }
+                    >span { font-size: 3em; float:left; width:100%; font-weight:bold; text-transform:uppercase; 
+						.border-box; padding-left:@icon-width+@spacing; margin-left:@icon-width*-1; text-align:center; 
+						padding-right:@icon-width; color:inherit; }
+                }
+                >div.todasHoras { padding:0px; border-top:solid 1px @border-colour;
+                >div.horas{
+                    >div.row{
+                        >div.col-md-1{
+                            >span.hora { 
+                                float:left; 
+                                width:100%; 
+                                .border-box; 
+                                border:solid 1px @border-colour; 
+                                font-size:16px; 
+                                text-align:center; .vertical-centre(35px); 
+                                cursor:pointer; color:black;
+                            }
+                        }
+                        >div.col-md-11{
+                                float:left; 
+                                width:100%; 
+                                .border-box; 
+                                border-top:solid 1px @border-colour; 
+                                cursor:pointer;
+                        }
+                    }    
+                }                
+                    &.names>span { color:@secondary-colour; font-weight:bold; }
+                }
+            }

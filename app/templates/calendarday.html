@@ -1,0 +1,26 @@
+<div class="header col-md-12">
+    <i class="fa fa-angle-left" ng-click="previousDay()"></i>
+    <span>{{currentDay.format("LL")}}</span>
+    <i class="fa fa-angle-right" ng-click="nextDay()"></i>
+</div>
+<div class="todasHoras col-md-12">
+    <div class="horas">
+        <div class="row">
+            <div class="col-md-1">
+                <span class="hora">Hora</span>
+            </div>
+            <div class="col-md-11">
+            </div>
+        </div>
+    </div>
+    <div class="horas" ng-repeat="hour in hours">
+        <div class="row">
+            <div class="col-md-1">
+                <span class="hora" ng-click="select(hour)">{{hour.name}}</span>
+            </div>
+            <div class="col-md-11">
+            </div>
+        </div>
+    </div>
+</div>
+</div>
