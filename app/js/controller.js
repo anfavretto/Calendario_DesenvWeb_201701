@@ -1,8 +1,36 @@
 var app = angular.module("calendar", []);
 
 app.controller("controllerCalendar", function ($scope) {
-    $scope.day = moment();
+
+    console.log("ControllerCalendar");
+
+    $scope.day = moment().date;
     $scope.visualizacaoAtualMes = true;
+
+    $scope.$on("selectDate", function(event, dateSelected) {
+        console.log("selectDate");
+        $scope.day = dateSelected;
+    });
+
+    $scope.$on("nextDate", function() {
+        console.log("nextDate");
+        $scope.day.date($scope.day.date() + 1);
+    });
+
+    $scope.$on("previousDate", function() {
+        console.log("previousDate");
+        $scope.day.date($scope.day.date() - 1);
+    });
+
+    $scope.$on("nextMonth", function() {
+        console.log("nextDate");
+        $scope.day.date($scope.day.month() + 1);
+    });
+
+    $scope.$on("previousMonth", function() {
+        console.log("previousDate");
+        $scope.day.date($scope.day.month() - 1);
+    });
 });
 
 (function (factory) {
@@ -63,9 +91,9 @@ app.directive("calendar", function () {
     return {
         restrict: "E",
         templateUrl: "templates/calendar.html",
-        scope: {
-            selected: "="
-        },
+        // scope: {
+        //     selected: "="
+        // },
         link: function (scope) {
             /*
                 Define um valor inicial para o dia selecionado, 
@@ -74,7 +102,9 @@ app.directive("calendar", function () {
                 Usamos Moment para definir a hora para a meia-noite e, 
                 em seguida, gerar a data de início atual para o mês inicial do calendário.
             */
-            scope.selected = _removeTime(scope.selected || moment());
+            // debugger;
+            console.log(scope);
+            scope.selected = moment();
             scope.month = scope.selected.clone();
 
             var start = scope.selected.clone();
@@ -83,21 +113,29 @@ app.directive("calendar", function () {
 
             _buildMonth(scope, start, scope.month);
 
+            scope.$emit("selectDate", scope.selected);
+
             scope.select = function (day) {
                 scope.selected = day.date;
+                scope.$emit("selectDate", day.date);
+                // scope.weeks.push({});
             };
             scope.next = function () {
+                console.log("next");
                 var next = scope.month.clone();
                 _removeTime(next.month(next.month() + 1).date(1));
                 scope.month.month(scope.month.month() + 1);
                 _buildMonth(scope, next, scope.month);
+                scope.$emit("nextMonth");
             };
 
             scope.previous = function () {
+                console.log("previous");
                 var previous = scope.month.clone();
                 _removeTime(previous.month(previous.month() - 1).date(1));
                 scope.month.month(scope.month.month() - 1);
                 _buildMonth(scope, previous, scope.month);
+                scope.$emit("previousMonth");                
             };
         }
     };
@@ -138,29 +176,35 @@ app.directive("calendarday", function () {
     return {
         restrict: "E",
         templateUrl: 'templates/calendarday.html',
-        scope: {
-            selected: "=day"
-        },
+        // scope: {
+        //     selected: "="
+        // },
          link: function (scope) {
+             
+             console.log("calendarday");
+             console.log(scope);
                 
              scope.selected = _removeTime(scope.selected || moment());
              scope.currentDay = scope.selected.clone().hour(1);
              
              _buildHours(scope.currentDay);
-             scope.select = function (hour) {
+             scope.selectHour = function (hour) {
                 console.log("hora selecionada "+ hour);
+                console.log(hour);
              };
 
             scope.nextDay = function () {
                 var next = scope.currentDay.clone();
                 _removeTime(next.date(next.date() + 1));
-                scope.currentDay.date(scope.currentDay.date() + 1);             
+                // scope.currentDay.date(scope.currentDay.date() + 1);             
+                scope.$emit("nextDate");
             };
 
             scope.previousDay = function () {
                 var previous = scope.currentDay.clone();
                 _removeTime(previous.date(previous.date() - 1));
-                scope.currentDay.date(scope.currentDay.date() - 1);               
+                // scope.currentDay.date(scope.currentDay.date() - 1);    
+                scope.$emit("previousDate");           
             };
 
             function _buildHours(date) {
@@ -179,6 +223,6 @@ app.directive("calendarday", function () {
     };
 
     function _removeTime(date) {
-        return date.day(0).hour(0).minute(0).second(0).millisecond(0);
+        return date.hour(0).minute(0).second(0).millisecond(0);
     }    
 });
