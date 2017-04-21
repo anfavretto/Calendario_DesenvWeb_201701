@@ -1,7 +1,7 @@
 var app = angular.module("calendar", []);
 
 app.controller("controllerCalendar", function ($scope) {
-
+    
     $scope.day = moment().date;
     $scope.visualizacaoAtualMes = true;
     
@@ -24,7 +24,34 @@ app.controller("controllerCalendar", function ($scope) {
     $scope.$on("previousMonth", function() {
         $scope.day.date($scope.day.month() - 1);
     });
+          
+    $scope.eventos = [];
 
+    function EventoData() {
+        this.descricao = "";  
+        this.data = $scope.day;      
+        this.titulo = "";
+    }
+
+    EventoData.prototype.copy = function() {
+        return {
+            descricao: this.descricao,            
+            titulo: this.titulo,
+            data: $scope.day
+        }
+    };
+
+    EventoData.prototype.clear = function() {
+        this.descricao = "";        
+        this.titulo = "";
+    };
+
+    $scope.eventoData = new EventoData();
+
+    $scope.adicionarEvento = function() {
+        $scope.eventos.push($scope.eventoData.copy());
+        $scope.eventoData.clear();
+    };
     
 });
 
