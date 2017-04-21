@@ -24,12 +24,23 @@ app.controller("controllerCalendar", function ($scope) {
     $scope.$on("previousMonth", function() {
         $scope.day.date($scope.day.month() - 1);
     });
-          
-    $scope.eventos = [];
+	
+    $scope.eventos = [
+	  {
+      "descricao" : "Futebol com a galera :)",
+      "data" : '21/04/2017',
+	  "titulo" : 'Jogo de Futebol'
+	  },
+	  {
+      "descricao" : "Chá com a Rainha da Inglaterra",
+      "data" : '21/04/2017',
+	  "titulo" : 'Chá com a Rainha'
+	  }
+	];
 
     function EventoData() {
-        this.descricao = "";  
-        this.data = $scope.day;      
+        this.descricao = ""; 
+        this.data = moment($scope.day).format('DD/MM/YYYY');      
         this.titulo = "";
     }
 
@@ -37,8 +48,8 @@ app.controller("controllerCalendar", function ($scope) {
         return {
             descricao: this.descricao,            
             titulo: this.titulo,
-            data: $scope.day
-        }
+            data: moment($scope.day).format('DD/MM/YYYY')
+			}
     };
 
     EventoData.prototype.clear = function() {
@@ -49,6 +60,7 @@ app.controller("controllerCalendar", function ($scope) {
     $scope.eventoData = new EventoData();
 
     $scope.adicionarEvento = function() {
+		console.log("Adicionado Evento");
         $scope.eventos.push($scope.eventoData.copy());
         $scope.eventoData.clear();
     };
@@ -161,6 +173,15 @@ app.directive("calendar", function () {
             monthIndex = date.month();
         }
     }
+	
+	function showTable(string1){
+	    var auxData = moment($scope.day).format('DD/MM/YYYY');
+		if (typeof string1=="string" && typeof auxData=="string" && string1 === auxData ){
+			return true;
+		}else{
+			return false;
+		}
+	}
 
     function _buildWeek(date, month) {
         var days = [];
