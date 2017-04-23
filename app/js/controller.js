@@ -1,70 +1,70 @@
 var app = angular.module("calendar", []);
 
 app.controller("controllerCalendar", function ($scope) {
-    
+
     $scope.day = moment().date;
     $scope.visualizacaoAtualMes = true;
-    
-    $scope.$on("selectDate", function(event, dateSelected) {
+
+    $scope.$on("selectDate", function (event, dateSelected) {
         $scope.day = dateSelected;
     });
 
-    $scope.$on("nextDate", function() {
+    $scope.$on("nextDate", function () {
         $scope.day.date($scope.day.date() + 1);
     });
 
-    $scope.$on("previousDate", function() {
+    $scope.$on("previousDate", function () {
         $scope.day.date($scope.day.date() - 1);
     });
 
-    $scope.$on("nextMonth", function() {
+    $scope.$on("nextMonth", function () {
         $scope.day.date($scope.day.month() + 1);
     });
 
-    $scope.$on("previousMonth", function() {
+    $scope.$on("previousMonth", function () {
         $scope.day.date($scope.day.month() - 1);
     });
-	
+
     $scope.eventos = [
-	  {
-      "descricao" : "Futebol com a galera :)",
-      "data" : '21/04/2017',
-	  "titulo" : 'Jogo de Futebol'
-	  },
-	  {
-      "descricao" : "Chá com a Rainha da Inglaterra",
-      "data" : '21/04/2017',
-	  "titulo" : 'Chá com a Rainha'
-	  }
-	];
+        {
+            "descricao": "Futebol com a galera :)",
+            "data": $scope.day.date,
+            "titulo": 'Jogo de Futebol'
+        },
+        {
+            "descricao": "Chá com a Rainha da Inglaterra",
+            "data": $scope.day.date,
+            "titulo": 'Chá com a Rainha'
+        }
+    ];
 
     function EventoData() {
-        this.descricao = ""; 
-        this.data = moment($scope.day).format('DD/MM/YYYY');      
+        this.descricao = "";
+        this.data = $scope.day.date;
         this.titulo = "";
     }
 
-    EventoData.prototype.copy = function() {
+    EventoData.prototype.copy = function () {
         return {
-            descricao: this.descricao,            
+            descricao: this.descricao,
             titulo: this.titulo,
-            data: moment($scope.day).format('DD/MM/YYYY')
-			}
+            data: $scope.day.date
+        }
     };
 
-    EventoData.prototype.clear = function() {
-        this.descricao = "";        
+    EventoData.prototype.clear = function () {
+        this.descricao = "";
         this.titulo = "";
     };
 
     $scope.eventoData = new EventoData();
 
-    $scope.adicionarEvento = function() {
-		console.log("Adicionado Evento");
+    $scope.adicionarEvento = function () {
+        console.log("Adicionado Evento");
         $scope.eventos.push($scope.eventoData.copy());
         $scope.eventoData.clear();
+        $scope.$apply();
     };
-    
 });
 
 (function (factory) {
@@ -150,14 +150,26 @@ app.directive("calendar", function () {
                 scope.$emit("selectDate", day.date);
             };
             scope.next = function () {
-                scope.$emit("nextMonth");
+                var next = scope.month.clone();
+                _removeTime(next.month(next.month() + 1).date(1));
+                scope.month.month(scope.month.month() + 1);
+                _buildMonth(scope, next, scope.month);
             };
 
             scope.previous = function () {
-                scope.$emit("previousMonth");                
+                var previous = scope.month.clone();
+                _removeTime(previous.month(previous.month() - 1).date(1));
+                scope.month.month(scope.month.month() - 1);
+                _buildMonth(scope, previous, scope.month);
             };
         }
     };
+
+    function shouldDateBeShown(dt, dt2) {
+            var datea = moment(dt).format("DD/MM/YYYY");
+            var dateb = moment(dt2).format("DD/MM/YYYY");
+            return datea == dateb;
+    }
 
     function _removeTime(date) {
         return date.day(0).hour(0).minute(0).second(0).millisecond(0);
@@ -173,15 +185,15 @@ app.directive("calendar", function () {
             monthIndex = date.month();
         }
     }
-	
-	function showTable(string1){
-	    var auxData = moment($scope.day).format('DD/MM/YYYY');
-		if (typeof string1=="string" && typeof auxData=="string" && string1 === auxData ){
-			return true;
-		}else{
-			return false;
-		}
-	}
+
+    function showTable(string1) {
+        var auxData = moment($scope.day).format('DD/MM/YYYY');
+        if (typeof string1 == "string" && typeof auxData == "string" && string1 === auxData) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     function _buildWeek(date, month) {
         var days = [];
@@ -204,23 +216,23 @@ app.directive("calendarday", function () {
     return {
         restrict: "E",
         templateUrl: 'templates/calendarday.html',
-         link: function (scope) {
-             
-             scope.selected = _removeTime(scope.selected || moment());
-             scope.currentDay = scope.selected.clone().hour(1);
-             
-             _buildHours(scope.currentDay);
-             scope.selectHour = function (hour) {
-                console.log("hora selecionada "+ hour);
+        link: function (scope) {
+
+            scope.selected = _removeTime(scope.selected || moment());
+            scope.currentDay = scope.selected.clone().hour(1);
+
+            _buildHours(scope.currentDay);
+            scope.selectHour = function (hour) {
+                console.log("hora selecionada " + hour);
                 console.log(hour);
-             };
+            };
 
             scope.nextDay = function () {
                 scope.$emit("nextDate");
             };
 
             scope.previousDay = function () {
-                scope.$emit("previousDate");           
+                scope.$emit("previousDate");
             };
 
             function _buildHours(date) {
@@ -235,10 +247,10 @@ app.directive("calendarday", function () {
                     date.add(1, "hour");
                 }
             }
-         }
+        }
     };
 
     function _removeTime(date) {
         return date.hour(0).minute(0).second(0).millisecond(0);
-    }    
+    }
 });
