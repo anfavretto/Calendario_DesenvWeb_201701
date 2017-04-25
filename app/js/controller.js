@@ -6,6 +6,7 @@ app.controller("controllerCalendar", function ($scope) {
     $scope.visualizacaoAtualMes = true;
 
     $scope.$on("selectDate", function (event, dateSelected) {
+        console.log("?");
         $scope.day = dateSelected;
     });
 
@@ -254,3 +255,14 @@ app.directive("calendarday", function () {
         return date.hour(0).minute(0).second(0).millisecond(0);
     }
 });
+
+LS.hasStorage();
+
+/* Salva evento teste */
+var event   = new Object();
+event.time  = '17:45';
+event.title = 'Trabalho de WebDev';
+event.descricao = 'Blábláblá';
+
+LS.saveData('20170425', event);
+/* Chave composta por YYYYMMDD */
