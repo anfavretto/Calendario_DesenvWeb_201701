@@ -58,7 +58,7 @@
 			<table class="table table-condensed" style="border-color: #b2b2b2" ng-show="eventos.length > 0">
 				<tr class="success">
 					<td><strong>Título</strong></td>
-					<td><strong>Descrição</strong></td>
+					<td colspan="2"><strong>Descrição</strong></td>
 				</tr>
 				<tr data-ng-repeat="x in eventos" class="success">
 					<div ng-show="shouldDateBeShown(x.data, day)">
@@ -66,6 +66,7 @@
 					</div>
 					<div ng-show="shouldDateBeShown(x.data, day)">
 						<td>{{ x.descricao }}</td>
+						<td><button ng-click="removerEvento($index)">X</button></td>
 					</div>
 				</tr>
 				<p ng-hide="eventos.length > 0"><strong>Sem atividades hoje!</strong></p>

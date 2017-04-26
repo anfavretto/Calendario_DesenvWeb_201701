@@ -28,20 +28,6 @@ app.controller("controllerCalendar", function ($scope) {
         $scope.day.date($scope.day.month() - 1);
     });
 
-    /*
-    $scope.eventos = [
-        {
-            "descricao": "Futebol com a galera :)",
-            "data": $scope.day.date,
-            "titulo": 'Jogo de Futebol'
-        },
-        {
-            "descricao": "Chá com a Rainha da Inglaterra",
-            "data": $scope.day.date,
-            "titulo": 'Chá com a Rainha'
-        }
-    ];*/
-
     function EventoData() {
         this.descricao = "";
         this.data = $scope.day.date;
@@ -63,9 +49,14 @@ app.controller("controllerCalendar", function ($scope) {
 
     $scope.eventoData = new EventoData();
 
+    $scope.removerEvento = function(i){
+        var chaveEvento = $scope.day.format('YYYYMMDD');
+        $scope.eventos.splice(i, 1);
+        LS.saveData(chaveEvento, $scope.eventos);
+    };
+
     $scope.adicionarEvento = function () {
         console.log("Adicionado Evento");
-        console.log($scope.eventos);
         if ($scope.eventos == undefined) $scope.eventos = new Array();
         var chaveEvento = $scope.day.format('YYYYMMDD');
         $scope.eventos.push($scope.eventoData.copy());
