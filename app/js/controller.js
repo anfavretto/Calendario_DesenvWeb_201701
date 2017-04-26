@@ -28,6 +28,7 @@ app.controller("controllerCalendar", function ($scope) {
         $scope.day.date($scope.day.month() - 1);
     });
 
+    /*
     $scope.eventos = [
         {
             "descricao": "Futebol com a galera :)",
@@ -39,7 +40,7 @@ app.controller("controllerCalendar", function ($scope) {
             "data": $scope.day.date,
             "titulo": 'Chá com a Rainha'
         }
-    ];
+    ];*/
 
     function EventoData() {
         this.descricao = "";
