@@ -18,18 +18,8 @@ LS = {
 
     saveData: function(k, v)
     {
-        // Lê LocalStorage
-        var events = new Array(); 
-
-        // Procura pela chave
-        if (this.ce[k] != null)
-            events = this.ce[k];
-        else
-            events = new Array();
-
         // Adiciona informação
-        events.push(v);
-        this.ce[k] = events;
+        this.ce[k] = v;
 
         // Salva
         localStorage.setItem('calendarEvents', JSON.stringify(this.ce));
@@ -37,6 +27,11 @@ LS = {
 
     getData(k, v)
     {
+        // Lê LocalStorage
+        var eventos = new Array();
 
+        // Procura pela chave
+        return this.ce[k];
+        
     }
 }

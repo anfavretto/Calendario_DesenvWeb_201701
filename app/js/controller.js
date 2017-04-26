@@ -6,7 +6,9 @@ app.controller("controllerCalendar", function ($scope) {
     $scope.visualizacaoAtualMes = true;
 
     $scope.$on("selectDate", function (event, dateSelected) {
-        console.log("?");
+        var chaveEvento = dateSelected.format('YYYYMMDD');
+        $scope.eventos = LS.getData(chaveEvento);
+        //console.log($scope.eventos);
         $scope.day = dateSelected;
     });
 
@@ -62,9 +64,14 @@ app.controller("controllerCalendar", function ($scope) {
 
     $scope.adicionarEvento = function () {
         console.log("Adicionado Evento");
+        console.log($scope.eventos);
+        if ($scope.eventos == undefined) $scope.eventos = new Array();
+        var chaveEvento = $scope.day.format('YYYYMMDD');
         $scope.eventos.push($scope.eventoData.copy());
         $scope.eventoData.clear();
-        $scope.$apply();
+        //$scope.$apply();
+
+        LS.saveData(chaveEvento, $scope.eventos);
     };
 });
 
@@ -76,7 +83,7 @@ app.controller("controllerCalendar", function ($scope) {
     } else {
         factory(window.moment); // Browser global
     }
-
+    LS.hasStorage();
     //Função para deixar o moment.js em portugues
 }(function (moment) {
     return moment.defineLocale('pt-br', {
@@ -256,9 +263,9 @@ app.directive("calendarday", function () {
     }
 });
 
-LS.hasStorage();
 
-/* Salva evento teste */
+
+/* Salva evento teste 
 var event   = new Object();
 event.time  = '17:45';
 event.title = 'Trabalho de WebDev';

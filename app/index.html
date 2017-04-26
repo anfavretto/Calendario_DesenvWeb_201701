@@ -55,15 +55,20 @@
 		<div class="col-md-5 activities">
 			<h3>Atividades em {{day.format('DD/MM/YYYY, dddd')}}.</h3>
 			<hr/>
-			<table border="3" style="margin: 0 auto; margin-bottom: 10px">
-				<tr data-ng-repeat="x in eventos">
+			<table class="table table-condensed" style="border-color: #b2b2b2" ng-show="eventos.length > 0">
+				<tr class="success">
+					<td><strong>Título</strong></td>
+					<td><strong>Descrição</strong></td>
+				</tr>
+				<tr data-ng-repeat="x in eventos" class="success">
 					<div ng-show="shouldDateBeShown(x.data, day)">
-						<td style="background-color:white">{{ x.titulo }}</td>
+						<td>{{ x.titulo }}</td>
 					</div>
 					<div ng-show="shouldDateBeShown(x.data, day)">
-						<td style="background-color:white">{{ x.descricao }}</td>
+						<td>{{ x.descricao }}</td>
 					</div>
 				</tr>
+				<p ng-hide="eventos.length > 0"><strong>Sem atividades hoje!</strong></p>
 			</table>
 		</div>
 	</div>
