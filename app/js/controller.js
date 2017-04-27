@@ -167,6 +167,13 @@ app.directive("calendar", function () {
             return datea == dateb;
     }
 
+	 function shouldDateBeShownWithHour(dt, dt2, hour1, hour2) {
+            var datea = moment(dt).format("DD/MM/YYYY");
+            var dateb = moment(dt2).format("DD/MM/YYYY");
+			var array = hour2.split(':');
+            return datea == dateb && hour1 == hour2[0];
+    }
+
     function _removeTime(date) {
         return date.day(0).hour(0).minute(0).second(0).millisecond(0);
     }

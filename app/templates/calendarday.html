@@ -16,9 +16,11 @@
             <div class="col-md-1">
                 <span class="hora" ng-click="selectHour(hour)">{{hour.name}}</span>
             </div>
-            <div class="col-md-11">
+			<div ng-repeat="x in eventos">
+			<div ng-show="shouldDateBeShownWithHour(x.data, day, x.hora, hour.name)">
+				 <h4> {{ x.hora }}:{{ x.minuto }} - {{ x.titulo }} - {{ x.descricao }} </h4>
             </div>
-        </div>
-    </div>
-</div>
+			</div>
+		</div>
+	</div>
 </div>
