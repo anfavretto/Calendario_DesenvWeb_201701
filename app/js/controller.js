@@ -40,9 +40,7 @@ app.controller("controllerCalendar", function ($scope) {
 
     EventoData.prototype.clear = function () {
         this.descricao = "";
-        this.titulo = "";
-        this.hora = 0;
-        this.minuto = 0;       
+        this.titulo = "";       
     };
 
     $scope.eventoData = new EventoData();
@@ -182,16 +180,7 @@ app.directive("calendar", function () {
             done = count++ > 2 && monthIndex !== date.month();
             monthIndex = date.month();
         }
-    }
-
-    function showTable(string1) {
-        var auxData = moment($scope.day).format('DD/MM/YYYY');
-        if (typeof string1 == "string" && typeof auxData == "string" && string1 === auxData) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+    }    
 
     function _buildWeek(date, month) {
         var days = [];
