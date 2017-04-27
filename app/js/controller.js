@@ -8,7 +8,6 @@ app.controller("controllerCalendar", function ($scope) {
     $scope.$on("selectDate", function (event, dateSelected) {
         var chaveEvento = dateSelected.format('YYYYMMDD');
         $scope.eventos = LS.getData(chaveEvento);
-        //console.log($scope.eventos);
         $scope.day = dateSelected;
     });
 
@@ -20,48 +19,45 @@ app.controller("controllerCalendar", function ($scope) {
         $scope.day.date($scope.day.date() - 1);
     });
 
-    $scope.$on("nextMonth", function () {
-        $scope.day.date($scope.day.month() + 1);
-    });
-
-    $scope.$on("previousMonth", function () {
-        $scope.day.date($scope.day.month() - 1);
-    });
-
     function EventoData() {
         this.descricao = "";
         this.data = $scope.day.date;
         this.titulo = "";
+        this.hora = 0;
+        this.minuto = 0;
     }
 
     EventoData.prototype.copy = function () {
+        console.log(this.minuto);
         return {
             descricao: this.descricao,
             titulo: this.titulo,
-            data: $scope.day.date
+            data: $scope.day.date,
+            hora: this.hora,
+            minuto: this.minuto
         }
     };
 
     EventoData.prototype.clear = function () {
         this.descricao = "";
         this.titulo = "";
+        this.hora = 0;
+        this.minuto = 0;       
     };
 
     $scope.eventoData = new EventoData();
-
+    
     $scope.removerEvento = function(i){
-        var chaveEvento = $scope.day.format('YYYYMMDD');
+        var chaveEvento = $scope.day.format('YYYYMMDD');       
         $scope.eventos.splice(i, 1);
         LS.saveData(chaveEvento, $scope.eventos);
     };
 
-    $scope.adicionarEvento = function () {
-        console.log("Adicionado Evento");
+    $scope.adicionarEvento = function () {  
         if ($scope.eventos == undefined) $scope.eventos = new Array();
         var chaveEvento = $scope.day.format('YYYYMMDD');
         $scope.eventos.push($scope.eventoData.copy());
         $scope.eventoData.clear();
-        //$scope.$apply();
 
         LS.saveData(chaveEvento, $scope.eventos);
     };
@@ -149,6 +145,8 @@ app.directive("calendar", function () {
                 scope.selected = day.date;
                 scope.$emit("selectDate", day.date);
             };
+            
+
             scope.next = function () {
                 var next = scope.month.clone();
                 _removeTime(next.month(next.month() + 1).date(1));
@@ -222,10 +220,6 @@ app.directive("calendarday", function () {
             scope.currentDay = scope.selected.clone().hour(1);
 
             _buildHours(scope.currentDay);
-            scope.selectHour = function (hour) {
-                console.log("hora selecionada " + hour);
-                console.log(hour);
-            };
 
             scope.nextDay = function () {
                 scope.$emit("nextDate");
@@ -254,14 +248,3 @@ app.directive("calendarday", function () {
         return date.hour(0).minute(0).second(0).millisecond(0);
     }
 });
-
-
-
-/* Salva evento teste 
-var event   = new Object();
-event.time  = '17:45';
-event.title = 'Trabalho de WebDev';
-event.descricao = 'Blábláblá';
-
-LS.saveData('20170425', event);
-/* Chave composta por YYYYMMDD */

@@ -15,7 +15,6 @@
 </div>
 <div class="week" ng-repeat="week in weeks">
     <span class="day" ng-class="{ today: dayItem.isToday, 
-	'different-month': !dayItem.isCurrentMonth, selected: dayItem.date.isSame(day), 
-    'possuiEvento': eventos.indexOf(jobSet) === -1 }" 
-	ng-click="select(dayItem)" ng-repeat="dayItem in week.days">{{dayItem.number}}</span>
+	'different-month': !dayItem.isCurrentMonth, selected: dayItem.date.isSame(day)}" 
+	ng-click="select(dayItem)"  ng-repeat="dayItem in week.days">{{dayItem.number}}</span>
 </div>
