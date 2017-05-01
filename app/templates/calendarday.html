@@ -4,7 +4,7 @@
 <div class="todasHoras col-md-12">
     <div class="horas">
         <div class="row">
-            <div class="col-md-1">
+            <div class="col-md-1 tituloHora">
                 <span class="hora">Hora</span>
             </div>
             <div class="col-md-11">
@@ -12,11 +12,17 @@
         </div>
     </div>
     <div class="horas" ng-repeat="hour in hours">
-		<div class="row" ng-repeat="x in eventos" ng-show="eventos.length > 0" style="text-align: center;">
-            <div class="col-md-1">
+		<div class="row" >
+            <div class="col-md-1 tituloHora">
                 <span class="hora" ng-click="selectHour(hour)">{{hour.name}}</span>
             </div>
-				<span ng-show="hour.number == x.hora" style="color: black; font-size: large"> {{ x.titulo }} - {{ x.descricao }}</span>
+            <div class="col-md-11">
+				<span ng-repeat="x in eventos" ng-show="eventos.length > 0" style="text-align: center;" >
+                    <label class="descricaoEventos" ng-show="hour.number == x.hora" style="color: black; font-size: medium">
+                         {{x.hora}}:{{x.minuto}} - {{ x.titulo }} - {{ x.descricao }}
+                     </label>
+                </span>
+            </div>
 		</div>
 	</div>
 </div>

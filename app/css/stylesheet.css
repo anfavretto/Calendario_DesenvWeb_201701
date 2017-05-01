@@ -4,10 +4,13 @@
 			span { color:red;
                 >b { color:black; }
             }
-            
+            .tituloHora { padding-right: 0px;}
             .vertical-centre (@height) { height:@height; line-height:@height !important; display:inline-block; vertical-align:middle; }
             .border-box { box-sizing:border-box; -moz-box-sizing:border-box; }
             .calendar{margin-bottom: 20px}
+            .descricaoEventos{
+                font-weight: normal;
+            }
 
             @border-colour:#CCC;
             calendar {display:block; .border-box; background:white; border:solid 1px @border-colour; margin-bottom:20px;
@@ -72,14 +75,13 @@
                             }
                         }
                         >div.col-md-11{
-                                float:left; 
-                                width:100%; 
+                                float:left;
                                 .border-box; 
                                 border-top:solid 1px @border-colour; 
                                 cursor:pointer;
                         }
                     }    
                 }                
-                    &.names>span { color:@secondary-colour; font-weight:bold; }
+                    &.names>span { color:@secondary-colour;  }
                 }
             }
