@@ -59,7 +59,7 @@
 				<tr class="success">
 					<td><strong>Hora</strong></td>
 					<td><strong>Título</strong></td>
-					<td colspan="2"><strong>Descrição</strong></td>
+					<td colspan="3"><strong>Descrição</strong></td>
 				</tr>
 				<tr data-ng-repeat="x in eventos" class="success">
 					<div ng-show="shouldDateBeShown(x.data, day)">
@@ -70,7 +70,8 @@
 					</div>
 					<div ng-show="shouldDateBeShown(x.data, day)">
 						<td>{{ x.descricao }}</td>
-						<td><button ng-click="removerEvento($index)">X</button></td>
+						<td><button type="button" class="btn btn-default" data-toggle="modal" data-target="#addEvento" ng-click="editarEvento($index)">Editar</button></td>
+						<td><button type="button" class="btn btn-default" ng-click="removerEvento($index)">Remover</button></td>
 					</div>
 				</tr>
 				<p ng-hide="eventos.length > 0"><strong>Sem atividades </strong></p>

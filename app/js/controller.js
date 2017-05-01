@@ -59,6 +59,11 @@ app.controller("controllerCalendar", function ($scope) {
 
         LS.saveData(chaveEvento, $scope.eventos);
     };
+
+    $scope.editarEvento = function(i) {
+        var evento = $scope.eventos[i];
+        $scope.eventoData = evento;
+    };
 });
 
 (function (factory) {
