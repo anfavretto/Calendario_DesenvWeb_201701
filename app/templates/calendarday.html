@@ -12,15 +12,11 @@
         </div>
     </div>
     <div class="horas" ng-repeat="hour in hours">
-        <div class="row">
+		<div class="row" ng-repeat="x in eventos" ng-show="eventos.length > 0" style="text-align: center;">
             <div class="col-md-1">
                 <span class="hora" ng-click="selectHour(hour)">{{hour.name}}</span>
             </div>
-			<div ng-repeat="x in eventos">
-			<div ng-show="shouldDateBeShownWithHour(x.data, day, x.hora, hour.name)">
-				 <h4> {{ x.hora }}:{{ x.minuto }} - {{ x.titulo }} - {{ x.descricao }} </h4>
-            </div>
-			</div>
+				<span ng-show="hour.number == x.hora" style="color: black; font-size: large"> {{ x.titulo }} - {{ x.descricao }}</span>
 		</div>
 	</div>
 </div>
