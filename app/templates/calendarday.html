@@ -4,6 +4,17 @@
 <div class="todasHoras col-md-12">
     <div class="horas">
         <div class="row">
+            <div class="col-md-12">
+                <span ng-repeat="x in lembretes" ng-show="lembretes.length > 0" style="text-align: center;" >
+                    <p class="descricaoLembretes centro" ng-show="x.hora == 0 && x.minuto == 0" >
+                        Dia Todo - {{ x.titulo }} - {{ x.descricao }} / {{ x.concluido == true ? 'Concluído' : 'Não concluído' }}
+                    </p>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="horas">
+        <div class="row">
             <div class="col-md-1 tituloHora">
                 <span class="hora">Hora</span>
             </div>
@@ -18,9 +29,14 @@
             </div>
             <div class="col-md-11">
 				<span ng-repeat="x in eventos" ng-show="eventos.length > 0" style="text-align: center;" >
-                    <label class="descricaoEventos" ng-show="hour.number == x.hora" style="color: black; font-size: medium">
+                    <p class="descricaoEventos" ng-show="hour.number == x.hora" style="color: black; font-size: medium">
                          {{x.hora}}:{{x.minuto}} - {{ x.titulo }} - {{ x.descricao }}
-                     </label>
+                     </p>
+                </span>
+                <span ng-repeat="x in lembretes" ng-show="lembretes.length > 0" style="text-align: center;" >
+                    <p class="descricaoLembretes" ng-show="hour.number == x.hora" >
+                         {{x.hora}}:{{x.minuto}} - {{ x.titulo }} - {{ x.descricao }} / {{ x.concluido == true ? 'Concluído' : 'Não concluído' }}
+                     </p>
                 </span>
             </div>
 		</div>
