@@ -10,28 +10,39 @@ LS = {
             else
                 this.ce = new Object();
 
+                this.calendarReminders = localStorage.getItem('calendarReminders');
+            if (this.calendarReminders != null) 
+                this.calendarReminders = JSON.parse(this.calendarReminders);
+            else
+                this.calendarReminders = new Object();
+
         } else {
             alert('Não tem LocalStorage');
             return false;
         }
     },
 
-    saveData: function(k, v)
+    // type: E -> eventos, L -> Lembretes
+    saveData: function(key, value, type)
     {
-        // Adiciona informação
-        this.ce[k] = v;
+        
+        if(type == 'E'){
+            this.ce[key] = value; // Adiciona evento
+            localStorage.setItem('calendarEvents', JSON.stringify(this.ce));
+        }else{
+            this.calendarReminders[key] = value; // adiciona lembrete
+            localStorage.setItem('calendarReminders', JSON.stringify(this.calendarReminders));
+        }
 
-        // Salva
-        localStorage.setItem('calendarEvents', JSON.stringify(this.ce));
     },
 
-    getData(k, v)
+    getData(key, type)
     {
-        // Lê LocalStorage
-        var eventos = new Array();
-
+        console.log('tipo ' + type);
         // Procura pela chave
-        return this.ce[k];
-        
+        if(type == 'E'){
+            return this.ce[key];
+        }
+        return this.calendarReminders[key];        
     }
 }

@@ -45,6 +45,7 @@
 		</div>
 		<div class="col-md-2" style="float: right">
 			<button id="novoEvento" type="button" class="btn btn-default" data-toggle="modal" data-target="#addEvento" style="background: forestgreen; color: white">Novo Evento</button>
+			<button id="novoLembrete" type="button" class="btn btn-default" data-toggle="modal" data-target="#addLembrete" style="background: forestgreen; color: white">Novo Lembrete</button>
 		</div>
 	</div>
 	<div id="visualizacaoMes" class="row" ng-show="visualizacaoAtualMes">
@@ -59,7 +60,7 @@
 				<tr class="success">
 					<td><strong>Hora</strong></td>
 					<td><strong>Título</strong></td>
-					<td colspan="3"><strong>Descrição</strong></td>
+					<td colspan="2"><strong>Descrição</strong></td>
 				</tr>
 				<tr data-ng-repeat="x in eventos" class="success">
 					<div ng-show="shouldDateBeShown(x.data, day)">
@@ -70,11 +71,34 @@
 					</div>
 					<div ng-show="shouldDateBeShown(x.data, day)">
 						<td>{{ x.descricao }}</td>
-						<td><button type="button" class="btn btn-default" data-toggle="modal" data-target="#addEvento" ng-click="editarEvento($index)">Editar</button></td>
 						<td><button type="button" class="btn btn-default" ng-click="removerEvento($index)">Remover</button></td>
 					</div>
 				</tr>
 				<p ng-hide="eventos.length > 0"><strong>Sem atividades </strong></p>
+			</table>
+		</div>
+		<div class="col-md-5 activities">
+			<h3>Lembretes em {{day.format('DD/MM/YYYY, dddd')}}.</h3>
+			<hr/>
+			<table class="table table-condensed" style="border-color: #b2b2b2" ng-show="lembretes.length > 0">
+				<tr class="success">
+					<td><strong>Hora</strong></td>
+					<td><strong>Título</strong></td>
+					<td colspan="2"><strong>Descrição</strong></td>
+				</tr>
+				<tr data-ng-repeat="x in lembretes" class="success">
+					<div ng-show="shouldHourBeShown(x.data, day)">
+						<td> {{ x.hora > 0 || x.minuto > 0 ? x.hora + ' : ' + x.minuto : 'Dia todo' }}</td>
+					</div>
+					<div ng-show="shouldDateBeShown(x.data, day)">
+						<td>{{ x.titulo }}</td>
+					</div>
+					<div ng-show="shouldDateBeShown(x.data, day)">
+						<td>{{ x.descricao }}</td>
+						<td><button type="button" class="btn btn-default" ng-click="removerLembrete($index)">Remover</button></td>
+					</div>
+				</tr>
+				<p ng-hide="lembretes.length > 0"><strong>Sem lembretes </strong></p>
 			</table>
 		</div>
 	</div>
@@ -138,6 +162,79 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-success" data-dismiss="modal" ng-click="adicionarEvento()">Salvar</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Modal -->
+	<div class="modal fade" id="addLembrete" role="dialog">
+		<div class="modal-dialog">
+
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Novo Lembrete</h4>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-9 checkbox">
+							<label>
+								<input id="todoDia" type="checkbox" checked="lembreteAtual.diaTodo" ng-model="lembreteAtual.diaTodo"> Dia todo
+							</label>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-2">
+							<label for="dtp_input1" class="control-label">Dia</label>
+						</div>
+						<div class="col-md-10">
+							<label for="label_data" class="control-label">{{day.format('LL')}}</label>
+						</div>
+					</div>
+					<div class="row" ng-show="!lembreteAtual.diaTodo">
+						<div class="col-md-2">
+							<label for="dtp_input1" class="control-label">Hora</label>
+						</div>
+						<div class="col-md-4">
+							<input name="hora" type="number" class="form-control" min="0" max="23" step="1" ng-model="lembreteAtual.hora">
+						</div>
+						<div class="col-md-1">
+							<label for="dtp_input1" class="control-label">:</label>
+						</div>
+						<div class="col-md-4">
+							<input name="minuto" type="number" class="form-control" min="0" max="60" ng-model="lembreteAtual.minuto">
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-2">
+							<label for="label_titulo" class="control-label">Título</label>
+						</div>
+						<div class="col-md-9">
+							<input type="text" class="form-control" ng-model="lembreteAtual.titulo">
+						</div>
+					</div>
+
+					<!--descricao-->
+					<div class="row">
+						<div class="col-md-2">
+							<label for="label_descricao" class="control-label">Descrição</label>
+						</div>
+						<div class="col-md-9">
+							<input type="text" class="form-control" ng-model="lembreteAtual.descricao">
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-9 checkbox">
+							<label>
+							<input type="checkbox" ng-model="lembreteAtual.concluido"> Concluído
+							</label>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-success" data-dismiss="modal" ng-click="adicionarLembrete()">Salvar</button>
 					<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
 				</div>
 			</div>

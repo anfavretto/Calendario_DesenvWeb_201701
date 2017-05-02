@@ -7,7 +7,8 @@ app.controller("controllerCalendar", function ($scope) {
 
     $scope.$on("selectDate", function (event, dateSelected) {
         var chaveEvento = dateSelected.format('YYYYMMDD');
-        $scope.eventos = LS.getData(chaveEvento);
+        $scope.eventos = LS.getData(chaveEvento, 'E');
+        $scope.lembretes = LS.getData(chaveEvento, 'L');        
         $scope.day = dateSelected;
     });
 
@@ -48,7 +49,7 @@ app.controller("controllerCalendar", function ($scope) {
     $scope.removerEvento = function(i){
         var chaveEvento = $scope.day.format('YYYYMMDD');       
         $scope.eventos.splice(i, 1);
-        LS.saveData(chaveEvento, $scope.eventos);
+        LS.saveData(chaveEvento, $scope.eventos, 'E');
     };
 
     $scope.adicionarEvento = function () {  
@@ -57,13 +58,58 @@ app.controller("controllerCalendar", function ($scope) {
         $scope.eventos.push($scope.eventoData.copy());
         $scope.eventoData.clear();
 
-        LS.saveData(chaveEvento, $scope.eventos);
+        LS.saveData(chaveEvento, $scope.eventos, 'E');
     };
 
-    $scope.editarEvento = function(i) {
-        var evento = $scope.eventos[i];
-        $scope.eventoData = evento;
+    function Lembrete() {
+        this.descricao = "";
+        this.data = $scope.day.date;
+        this.titulo = "";
+        this.hora = 0;
+        this.minuto = 0;
+        this.concluido = false;
+        this.diaTodo = true;
+    }
+
+    Lembrete.prototype.copy = function () {
+        return {
+            descricao: this.descricao,
+            titulo: this.titulo,
+            data: $scope.day.date,
+            hora: this.hora,
+            minuto: this.minuto,
+            concluido: this.concluido,
+            diaTodo: this.diaTodo
+        }
     };
+
+    Lembrete.prototype.clear = function () {
+        this.descricao = "";
+        this.titulo = "";   
+        this.hora = 0;
+        this.minuto = 0;
+        this.concluido = false;
+        this.diaTodo = true;
+    };
+
+    $scope.lembreteAtual = new Lembrete();
+
+    $scope.adicionarLembrete = function () {  
+        if ($scope.lembretes == undefined) $scope.lembretes = new Array();
+        var chaveLembrete = $scope.day.format('YYYYMMDD');
+        $scope.lembretes.push($scope.lembreteAtual.copy());
+        console.log($scope.lembreteAtual.diaTodo);
+        $scope.lembreteAtual.clear();
+
+        LS.saveData(chaveLembrete, $scope.lembretes, 'L');
+    };
+
+    $scope.removerLembrete = function(i){
+        var chaveLembrete = $scope.day.format('YYYYMMDD');       
+        $scope.lembretes.splice(i, 1);
+        LS.saveData(chaveLembrete, $scope.lembretes, 'L');
+    };
+    
 });
 
 (function (factory) {
@@ -171,16 +217,7 @@ app.directive("calendar", function () {
             var dateb = moment(dt2).format("DD/MM/YYYY");
             return datea == dateb;
     }
-
-	 function shouldDateBeShownWithHour(data1, data2) {
-		 /*
-            var datea = moment(dt).format("DD/MM/YYYY");
-            var dateb = moment(dt2).format("DD/MM/YYYY");
-			*/
-			var array = hour2.split(':');
-            return hour1 == array[0] && eventos.length > 0;
-    }
-
+    
     function _removeTime(date) {
         return date.day(0).hour(0).minute(0).second(0).millisecond(0);
     }
